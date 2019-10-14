@@ -5,12 +5,14 @@ learn [AWS Serverless Application Repository](https://docs.aws.amazon.com/en_pv/
 ## Example using SAM CLI
 
 ```sh
+# define deployment bucket
 BUCKET="sam-deploy-bucket-01"
 
+# init sam app
 sam init --runtime nodejs
-
 cd sam-app
 
+# " create a Lambda deployment package".
 # add Metadata section to `template.yml`. see https://docs.aws.amazon.com/en_pv/serverlessrepo/latest/devguide/serverlessrepo-quick-start.html#serverlessrepo-quick-start-hello-world-package-app
 
 # package
@@ -24,11 +26,11 @@ sam publish \
     --template packaged.yaml \
     --region us-east-1
 
-# create SAM app to consume SAR
+# create SAM app to consume SAR (embedded SAR)
+# embed SAR (`Type: AWS::Serverless::Application`) in template.  see https://docs.aws.amazon.com/en_pv/serverless-application-model/latest/developerguide/serverless-sam-template.html#serverless-sam-template-application
 touch embed-serverless-application.yaml
-# embed SAR in template.  see https://docs.aws.amazon.com/en_pv/serverless-application-model/latest/developerguide/serverless-sam-template.html#serverless-sam-template-application
 
-# package
+# package embedded app
 sam package \
     --template-file embed-serverless-application.yaml \
     --output-template-file embed-serverless-application-packaged.yaml \
@@ -37,7 +39,7 @@ sam package \
 # define name for stack
 STACK_NAME="embed-serverless-application"
 
-# deploy.  note usage of `CAPABILITY_AUTO_EXPAND` param
+# deploy embedded app.  note usage of `CAPABILITY_AUTO_EXPAND` param
 sam deploy --template-file ./embed-serverless-application-packaged.yaml --stack-name "$STACK_NAME" --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
 
 # two stacks are created.  the parent (sam-app/embed-serverless-application-packaged.yaml) and the emb embedded SAR (packaged.yaml)
