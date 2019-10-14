@@ -33,7 +33,6 @@ TEMPLATE_URL=$(aws serverlessrepo get-cloud-formation-template --application-id 
 curl "$TEMPLATE_URL"
 
 # delete app
-aws serverlessrepo delete-application \
---application-id "$APP_ID"
+aws serverlessrepo delete-application --application-id "$APP_ID"
 
 ```
