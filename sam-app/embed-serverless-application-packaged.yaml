@@ -1,0 +1,11 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  myapp01:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location:
+        ApplicationId: arn:aws:serverlessrepo:us-east-1:529276214230:applications/my-app-01
+        SemanticVersion: 0.0.3
+      Parameters:
+        DefaultFunctionTimeout: '9'

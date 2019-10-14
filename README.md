@@ -2,6 +2,60 @@
 
 learn [AWS Serverless Application Repository](https://docs.aws.amazon.com/en_pv/serverlessrepo)
 
+## Example using SAM CLI
+
+```sh
+BUCKET="sam-deploy-bucket-01"
+
+sam init --runtime nodejs
+
+cd sam-app
+
+# add Metadata section to `template.yml`. see https://docs.aws.amazon.com/en_pv/serverlessrepo/latest/devguide/serverlessrepo-quick-start.html#serverlessrepo-quick-start-hello-world-package-app
+
+# package
+sam package \
+    --template-file template.yaml \
+    --output-template-file packaged.yaml \
+    --s3-bucket $BUCKET
+
+# publish to SAR.  will be private by default
+sam publish \
+    --template packaged.yaml \
+    --region us-east-1
+
+# consume SAR
+touch embed-serverless-application.yaml
+# embed SAR in template.  see https://docs.aws.amazon.com/en_pv/serverless-application-model/latest/developerguide/serverless-sam-template.html#serverless-sam-template-application
+
+# package
+sam package \
+    --template-file embed-serverless-application.yaml \
+    --output-template-file embed-serverless-application-packaged.yaml \
+    --s3-bucket $BUCKET
+
+# define name for stack
+STACK_NAME="embed-serverless-application"
+
+# deploy.  note usage of `CAPABILITY_AUTO_EXPAND` param
+sam deploy --template-file ./embed-serverless-application-packaged.yaml --stack-name "$STACK_NAME" --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+# two stacks are created.  the parent (sam-app/embed-serverless-application-packaged.yaml) and the emb embedded SAR (packaged.yaml)
+
+# cleanup / remove stack(s)
+aws cloudformation delete-stack --stack-name "$STACK_NAME"
+```
+
+SAR App in Console
+
+![](https://www.evernote.com/l/AAHSgG3f8apCC5F6fvQ178_xBzILM6IP110B/image.png)
+
+Nested CFN Stacks
+
+![](https://www.evernote.com/l/AAHO3LiMwJ1MeKiiqKxCk4yW10qtVMdusyMB/image.png)
+
+---
+
 ## Example using `aws serverlessrepo` CLI
 
 > can also be done (and is preferred) via sam cli
