@@ -24,7 +24,7 @@ sam publish \
     --template packaged.yaml \
     --region us-east-1
 
-# consume SAR
+# create SAM app to consume SAR
 touch embed-serverless-application.yaml
 # embed SAR in template.  see https://docs.aws.amazon.com/en_pv/serverless-application-model/latest/developerguide/serverless-sam-template.html#serverless-sam-template-application
 
@@ -58,7 +58,7 @@ Nested CFN Stacks
 
 ## Example using `aws serverlessrepo` CLI
 
-> can also be done (and is preferred) via sam cli
+> can also be done (and is preferred) via sam cli.  see above.
 
 ```sh
 
