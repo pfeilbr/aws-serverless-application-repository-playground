@@ -63,6 +63,8 @@ Nested CFN Stacks
 > can also be done (and is preferred) via sam cli.  see above.
 
 ```sh
+mkdir sar-cli-example
+cd sar-cli-example
 
 APP_NAME=myapp01
 
